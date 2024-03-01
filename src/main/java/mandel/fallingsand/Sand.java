@@ -45,6 +45,17 @@ public class Sand
 
         //if sand is at the bottom it can't go down
         //if sand falls and there's sand below it, it can't go anywhere
-    }
 
+        for (int i = field.length - 1; i > 0; i--)
+        {
+            for (int j = field[i].length - 1; j > 0; j--)
+            {
+                if (field[i][j] == 0 && field[i - 1][j] == 1)
+                {
+                    field[i][j] = 1;
+                    field[i - 1][j] = 0;
+                }
+            }
+        }
+    }
 }
