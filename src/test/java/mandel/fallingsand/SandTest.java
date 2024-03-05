@@ -77,4 +77,21 @@ class SandTest
         //then
         assertEquals("000\n010\n010\n", sand.toString());
     }
+
+    @Test
+    public void fullRowFall()
+    {
+        //given
+        Sand sand = new Sand();
+        sand.put(0, 0);
+        sand.put(1, 0);
+        sand.put(2, 0);
+
+        //when
+        sand.fall();
+
+        //then
+        assertEquals("000\n111\n000\n", sand.toString());
+
+    }
 }

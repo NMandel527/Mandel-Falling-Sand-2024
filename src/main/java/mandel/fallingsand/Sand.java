@@ -48,7 +48,7 @@ public class Sand
 
         for (int y = field.length - 1; y > 0; y--)
         {
-            for (int x = field[y].length - 1; x > 0; x--)
+            for (int x = field[y].length - 1; x >= 0; x--)
             {
                 if (field[y][x] == 0 && field[y - 1][x] == 1)
                 {
