@@ -82,8 +82,9 @@ public class Sand {
 
     public void randomSand(int n) {
         for (int i = 0; i < n; i++) {
-            int x = random.nextInt(field.length);
-            int y = random.nextInt(field[i].length);
+            int length = field.length - 1;
+            int y = random.nextInt(length);
+            int x = random.nextInt(field[length].length - 1);
             put(x, y);
         }
     }
