@@ -12,7 +12,7 @@ repositories {
 
 
 checkstyle {
-    configFile = '.github/workflows/checkstyles.xml' as File
+    configFile = '.github/workflows/checkstyle.xml' as File
 }
 
 //allows us to use junit in our code
