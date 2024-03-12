@@ -5,14 +5,13 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Sand sand;
+        Sand sand = new Sand(50, 10);
         Scanner input = new Scanner(System.in);
-        if (args.length < 3) {
-            sand = new Sand(50, 10);
-            sand.randomSand(50);
-        } else {
+        try {
             sand = new Sand(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
             sand.randomSand(Integer.parseInt(args[2]));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
         while (true) {
             System.out.println("enter");

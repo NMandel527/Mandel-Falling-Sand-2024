@@ -6,18 +6,14 @@ public class Sand {
 
     private final int[][] field;
     private final Random random;
-    private int width;
-    private int height;
 
-    public Sand(int w, int h) {
-        width = w;
-        height = h;
-        field = new int[h][w];
+    public Sand(int width, int height) {
+        field = new int[height][width];
         this.random = new Random();
     }
 
-    public Sand(int w, int h, Random random) {
-        field = new int[h][w];
+    public Sand(int width, int height, Random random) {
+        field = new int[height][width];
         this.random = random;
     }
 
@@ -25,8 +21,8 @@ public class Sand {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 0; y < field.length; y++) {
+            for (int x = 0; x < field[y].length; x++) {
                 builder.append(field[y][x]);
             }
             builder.append("\n");
@@ -59,15 +55,15 @@ public class Sand {
         //if sand falls and there's sand below it, it can't go anywhere
 
         for (int y = field.length - 2; y >= 0; y--) {
-            for (int x = 0; x < field[y].length; x++) {
+            for (int x = 0; x < field[0].length; x++) {
                 if (field[y][x] == 1) {
-                    // does the sand fall straight down?
                     if (field[y + 1][x] == 0) {
                         // does the sand fall straight down?
                         field[y][x] = 0;
                         field[y + 1][x] = 1;
                         continue;
                     }
+
                     boolean rightFirst = random.nextBoolean();
                     int direction1 = rightFirst ? +1 : -1;
                     int direction2 = rightFirst ? -1 : +1;
