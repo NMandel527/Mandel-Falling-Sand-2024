@@ -1,17 +1,32 @@
 package mandel.fallingsand;
 
-public class Sand
-{
-    private int [][] field = new int[3][3];
+import java.util.Random;
 
-    public String toString()
-    {
+public class Sand {
+
+    private final int[][] field;
+    private final Random random;
+    private int w;
+    private int h;
+
+    public Sand(int width, int height) {
+        w = width;
+        h = height;
+        field = new int[h][w];
+        this.random = new Random();
+    }
+
+    public Sand(int width, int height, Random random) {
+        field = new int[height][width];
+        this.random = random;
+    }
+
+    @Override
+    public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        for (int y = 0; y < 3; y++)
-        {
-            for (int x = 0; x < 3; x++)
-            {
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
                 builder.append(field[y][x]);
             }
             builder.append("\n");
@@ -25,8 +40,7 @@ public class Sand
      * @return the value in field
      */
 
-    public int get(int x, int y)
-    {
+    public int get(int x, int y) {
         return field[y][x];
     }
 
@@ -34,28 +48,48 @@ public class Sand
      * Sets the value in field to be 1
      */
 
-    public void put(int x, int y)
-    {
+    public void put(int x, int y) {
         field[y][x] = 1;
     }
 
-    public void fall()
-    {
+    public void fall() {
         //moves all sand down one square
 
         //if sand is at the bottom it can't go down
         //if sand falls and there's sand below it, it can't go anywhere
 
-        for (int y = field.length - 1; y > 0; y--)
-        {
-            for (int x = field[y].length - 1; x >= 0; x--)
-            {
-                if (field[y][x] == 0 && field[y - 1][x] == 1)
-                {
-                    field[y][x] = 1;
-                    field[y - 1][x] = 0;
+        for (int y = field.length - 2; y >= 0; y--) {
+            for (int x = 0; x < field[y].length; x++) {
+                if (field[y][x] == 1) {
+                    // does the sand fall straight down?
+                    if (field[y + 1][x] == 0) {
+                        // does the sand fall straight down?
+                        field[y][x] = 0;
+                        field[y + 1][x] = 1;
+                        continue;
+                    }
+                    boolean rightFirst = random.nextBoolean();
+                    int direction1 = rightFirst ? +1 : -1;
+                    int direction2 = rightFirst ? -1 : +1;
+
+                    if (field[y + 1][x + direction1] == 0) {
+                        field[y][x] = 0;
+                        field[y + 1][x + direction1] = 1;
+                    } else if (field[y + 1][x + direction2] == 0) {
+                        field[y][x] = 0;
+                        field[y + 1][x + direction2] = 1;
+                    }
                 }
             }
+        }
+    }
+
+    public void randomSand(int n) {
+        int x, y;
+        for (int i = 0; i < n; i++) {
+            x = random.nextInt(field.length);
+            y = random.nextInt(field[i].length);
+            put(x, y);
         }
     }
 }
