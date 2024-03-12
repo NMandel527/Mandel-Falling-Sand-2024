@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Sand sand = new Sand(50, 10);
+        sand.randomSand(50);
         Scanner input = new Scanner(System.in);
         try {
             sand = new Sand(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
