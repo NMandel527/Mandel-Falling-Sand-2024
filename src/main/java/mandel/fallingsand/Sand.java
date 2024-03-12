@@ -6,18 +6,18 @@ public class Sand {
 
     private final int[][] field;
     private final Random random;
-    private int w;
-    private int h;
+    private int width;
+    private int height;
 
-    public Sand(int width, int height) {
-        w = width;
-        h = height;
+    public Sand(int w, int h) {
+        width = w;
+        height = h;
         field = new int[h][w];
         this.random = new Random();
     }
 
-    public Sand(int width, int height, Random random) {
-        field = new int[height][width];
+    public Sand(int w, int h, Random random) {
+        field = new int[h][w];
         this.random = random;
     }
 
@@ -25,8 +25,8 @@ public class Sand {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        for (int y = 0; y < h; y++) {
-            for (int x = 0; x < w; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 builder.append(field[y][x]);
             }
             builder.append("\n");
@@ -85,7 +85,8 @@ public class Sand {
     }
 
     public void randomSand(int n) {
-        int x, y;
+        int x;
+        int y;
         for (int i = 0; i < n; i++) {
             x = random.nextInt(field.length);
             y = random.nextInt(field[i].length);
