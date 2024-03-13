@@ -55,7 +55,7 @@ public class Sand {
         //if sand falls and there's sand below it, it can't go anywhere
 
         for (int y = field.length - 2; y >= 0; y--) {
-            for (int x = 0; x < field[0].length; x++) {
+            for (int x = 0; x < field[y].length; x++) {
                 if (field[y][x] == 1) {
                     if (field[y + 1][x] == 0) {
                         // does the sand fall straight down?
