@@ -9,8 +9,9 @@ public class Main {
         while (keepFalling) {
             String before = sand.toString();
             sand.fall();
-            System.out.println(sand.toString());
-            if (before.equals(sand.toString())) {
+            String after = sand.toString();
+            System.out.println(after);
+            if (before.equals(after)) {
                 keepFalling = false;
             }
         }
