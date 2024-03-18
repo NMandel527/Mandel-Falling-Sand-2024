@@ -7,6 +7,7 @@ public class Main {
         sand.randomSand(50);
         boolean keepFalling = true;
         while (keepFalling) {
+            new SandFrame().setVisible(true);
             String before = sand.toString();
             sand.fall();
             String after = sand.toString();

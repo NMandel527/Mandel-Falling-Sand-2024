@@ -6,15 +6,29 @@ public class Sand {
 
     private final int[][] field;
     private final Random random;
+    private int width;
+    private int height;
 
     public Sand(int width, int height) {
+        this.width = width;
+        this.height = height;
         field = new int[height][width];
         this.random = new Random();
     }
 
     public Sand(int width, int height, Random random) {
+        this.width = width;
+        this.height = height;
         field = new int[height][width];
         this.random = random;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     @Override
@@ -48,6 +62,14 @@ public class Sand {
         field[y][x] = 1;
     }
 
+    public boolean position(int x, int y) {
+        return field[y][x] == 1;
+    }
+
+    public int[][] getField() {
+        return field;
+    }
+
     public void fall() {
         //moves all sand down one square
 
@@ -68,10 +90,11 @@ public class Sand {
                     int direction1 = rightFirst ? +1 : -1;
                     int direction2 = rightFirst ? -1 : +1;
 
-                    if (field[y + 1][x + direction1] == 0) {
+                    //make sure it doesn't go out of bounds
+                    if (x + direction1 >= 0 && x + direction1 < field[y].length && field[y + 1][x + direction1] == 0) {
                         field[y][x] = 0;
                         field[y + 1][x + direction1] = 1;
-                    } else if (field[y + 1][x + direction2] == 0) {
+                    } else if (x + direction2 >= 0 && x + direction2 < field[y].length && field[y + 1][x + direction2] == 0) {
                         field[y][x] = 0;
                         field[y + 1][x + direction2] = 1;
                     }
