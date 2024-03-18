@@ -2,12 +2,10 @@ package mandel.fallingsand;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Random;
 
 public class SandComponent extends JComponent {
 
     private final Sand sand;
-    private Random random;
 
     public SandComponent(Sand sand) {
         this.sand = sand;
