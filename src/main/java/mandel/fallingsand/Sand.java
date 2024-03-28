@@ -2,36 +2,62 @@ package mandel.fallingsand;
 
 import java.util.Random;
 
+import static java.lang.Math.min;
+
 public class Sand {
 
-    private final int[][] field;
     private final Random random;
-    private int width;
-    private int height;
+    private int[][] field;
 
     public Sand(int width, int height) {
-        this.width = width;
-        this.height = height;
-        field = new int[height][width];
-        this.random = new Random();
+        // call the other constructor to reduce code duplication
+        this(width, height, new Random());
     }
 
     public Sand(int width, int height, Random random) {
-        this.width = width;
-        this.height = height;
         field = new int[height][width];
         this.random = random;
     }
 
     public int getWidth() {
-        return width;
+        return field[0].length;
     }
 
     public int getHeight() {
-        return height;
+        return field.length;
     }
 
-    @Override
+    /**
+     * Adds random sand to our field
+     *
+     * @param n the amount of sand to add.
+     */
+    public void randomSand(int n) {
+        for (int i = 0; i < n; i++) {
+            put(
+                    random.nextInt(field[0].length),
+                    random.nextInt(field.length)
+            );
+        }
+    }
+
+    /**
+     * Sets the value in field to be 1
+     */
+    public void put(int x, int y) {
+        field[y][x] = 1;
+    }
+
+    public void put(int x, int y, int width, int height, double probability) {
+        for (int i = y; i < y + height; i++) {
+            for (int j = x; j < x + width; j++) {
+                if (random.nextDouble() <= probability) {
+                    field[i][j] = 1;
+                }
+            }
+        }
+    }
+    
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
@@ -43,74 +69,110 @@ public class Sand {
         }
 
         return builder.toString();
-
     }
 
     /**
      * @return the value in field
      */
-
     public int get(int x, int y) {
         return field[y][x];
     }
 
     /**
-     * Sets the value in field to be 1
+     * Moves all sand down one square if there is space
      */
-
-    public void put(int x, int y) {
-        field[y][x] = 1;
-    }
-
-    public boolean position(int x, int y) {
-        return field[y][x] == 1;
-    }
-
-    public int[][] getField() {
-        return field;
-    }
-
     public void fall() {
-        //moves all sand down one square
-
-        //if sand is at the bottom it can't go down
-        //if sand falls and there's sand below it, it can't go anywhere
-
         for (int y = field.length - 2; y >= 0; y--) {
             for (int x = 0; x < field[y].length; x++) {
-                if (field[y][x] == 1) {
-                    if (field[y + 1][x] == 0) {
-                        // does the sand fall straight down?
-                        field[y][x] = 0;
-                        field[y + 1][x] = 1;
-                        continue;
-                    }
-
-                    boolean rightFirst = random.nextBoolean();
-                    int direction1 = rightFirst ? +1 : -1;
-                    int direction2 = rightFirst ? -1 : +1;
-
-                    //make sure it doesn't go out of bounds
-                    if (x + direction1 >= 0 && x + direction1 < field[y].length
-                            && field[y + 1][x + direction1] == 0) {
-                        field[y][x] = 0;
-                        field[y + 1][x + direction1] = 1;
-                    } else if (x + direction2 >= 0 && x + direction2 < field[y].length
-                            && field[y + 1][x + direction2] == 0) {
-                        field[y][x] = 0;
-                        field[y + 1][x + direction2] = 1;
-                    }
+                if (isSand(x, y)) {
+                    moveSandDown(x, y);
                 }
             }
         }
     }
 
-    public void randomSand(int n) {
-        for (int i = 0; i < n; i++) {
-            int length = field.length;
-            int y = random.nextInt(length);
-            int x = random.nextInt(field[y].length);
-            put(x, y);
+    /**
+     * @return true if there is sand at the coordinates, otherwise false
+     */
+    public boolean isSand(int x, int y) {
+        return field[y][x] == 1;
+    }
+
+    /**
+     * Moves the sand down one square, or diagonally to the right or left
+     */
+    private void moveSandDown(int x, int y) {
+        // move down
+        if (move(x, y, x, y + 1)) {
+            return;
+        }
+
+        // choose either left or right
+        int direction = random.nextBoolean() ? +1 : -1;
+
+        // move diagonally down in one direction
+        if (move(x, y, x + direction, y + 1)) {
+            return;
+        }
+
+        // move diagonally down in the other direction
+        move(x, y, x - direction, y + 1);
+    }
+
+    /**
+     * Attempts to move the sand from x1, y1 to x2, y2
+     *
+     * @return true if the move was successful, otherwise false
+     */
+    public boolean move(int x1, int y1, int x2, int y2) {
+        if (inBounds(x2, y2) && isSand(x1, y1) && !isSand(x2, y2)) {
+            field[y1][x1] = 0;
+            field[y2][x2] = 1;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return true if the coordinates are in the field, otherwise false
+     */
+    public boolean inBounds(int x, int y) {
+        return 0 <= x && x < field[y].length;
+    }
+
+    public void resize(int width, int height) {
+        if (height == field.length && width == field[0].length) {
+            return;
+        }
+        int[][] newField = new int[height][width];
+
+        for (int y = 0; y < min(field.length, newField.length); y++) {
+            System.arraycopy(field[y], 0, newField[y], 0, min(field[y].length, newField[y].length));
+
+        }
+        field = newField;
+    }
+
+    public void load(String sandString) {
+        int x = 0;
+        int y = 0;
+
+        for (int i = 0; i < sandString.length(); i++) {
+            char c = sandString.charAt(i);
+            switch (c) {
+                case '\n' -> {
+                    y++;
+                    x = 0;
+                }
+                case '1' -> {
+                    field[y][x] = 1;
+                    x++;
+                }
+                default -> {
+                    field[y][x] = 0;
+                    x++;
+                }
+            }
         }
     }
 }
