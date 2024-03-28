@@ -8,32 +8,46 @@ public class Sand {
 
     private final Random random;
     private int[][] field;
-    private int width;
-    private int height;
 
     public Sand(int width, int height) {
-        this.width = width;
-        this.height = height;
-        field = new int[height][width];
-        this.random = new Random();
+        // call the other constructor to reduce code duplication
+        this(width, height, new Random());
     }
 
     public Sand(int width, int height, Random random) {
-        this.width = width;
-        this.height = height;
         field = new int[height][width];
         this.random = random;
     }
 
     public int getWidth() {
-        return width;
+        return field[0].length;
     }
 
     public int getHeight() {
-        return height;
+        return field.length;
     }
 
-    @Override
+    /**
+     * Adds random sand to our field
+     *
+     * @param n the amount of sand to add.
+     */
+    public void randomSand(int n) {
+        for (int i = 0; i < n; i++) {
+            put(
+                    random.nextInt(field[0].length),
+                    random.nextInt(field.length)
+            );
+        }
+    }
+
+    /**
+     * Sets the value in field to be 1
+     */
+    public void put(int x, int y) {
+        field[y][x] = 1;
+    }
+
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
@@ -45,40 +59,13 @@ public class Sand {
         }
 
         return builder.toString();
-
     }
 
     /**
      * @return the value in field
      */
-
     public int get(int x, int y) {
         return field[y][x];
-    }
-
-    /**
-     * Sets the value in field to be 1
-     */
-
-    public void put(int x, int y) {
-        field[y][x] = 1;
-    }
-
-    public void randomSand(int n) {
-        for (int i = 0; i < n; i++) {
-            put(
-                    random.nextInt(field[0].length),
-                    random.nextInt(field.length)
-            );
-        }
-    }
-
-    public boolean position(int x, int y) {
-        return isSand(y, x);
-    }
-
-    public int[][] getField() {
-        return field;
     }
 
     /**
@@ -95,8 +82,6 @@ public class Sand {
     }
 
     /**
-     * @param x
-     * @param y
      * @return true if there is sand at the coordinates, otherwise false
      */
     public boolean isSand(int x, int y) {
@@ -105,9 +90,6 @@ public class Sand {
 
     /**
      * Moves the sand down one square, or diagonally to the right or left
-     *
-     * @param x
-     * @param y
      */
     private void moveSandDown(int x, int y) {
         // move down
@@ -130,10 +112,6 @@ public class Sand {
     /**
      * Attempts to move the sand from x1, y1 to x2, y2
      *
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
      * @return true if the move was successful, otherwise false
      */
     public boolean move(int x1, int y1, int x2, int y2) {
@@ -146,8 +124,6 @@ public class Sand {
     }
 
     /**
-     * @param x
-     * @param y
      * @return true if the coordinates are in the field, otherwise false
      */
     public boolean inBounds(int x, int y) {
