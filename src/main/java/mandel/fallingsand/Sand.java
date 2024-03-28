@@ -48,6 +48,16 @@ public class Sand {
         field[y][x] = 1;
     }
 
+    public void put(int x, int y, int width, int height, double probability) {
+        for (int i = y; i < y + height; i++) {
+            for (int j = x; j < x + width; j++) {
+                if (random.nextDouble() <= probability) {
+                    field[i][j] = 1;
+                }
+            }
+        }
+    }
+    
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
@@ -161,16 +171,6 @@ public class Sand {
                 default -> {
                     field[y][x] = 0;
                     x++;
-                }
-            }
-        }
-    }
-
-    public void put(int x, int y, int width, int height, double probability) {
-        for (int i = y; i < y + height; i++) {
-            for (int j = x; j < x + width; j++) {
-                if (random.nextDouble() <= probability) {
-                    field[i][j] = 1;
                 }
             }
         }
